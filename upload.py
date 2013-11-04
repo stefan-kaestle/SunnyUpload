@@ -90,8 +90,11 @@ def put(power, daily, total):
         'dailyEnergy': daily,
         'wholeEnergy': total
         }
-    r = requests.post(PUTURL, data=data, auth=(USER, PASSWORD))
-    print(r.text)
+    try:
+        r = requests.post(PUTURL, data=data, auth=(USER, PASSWORD))
+        print(r.text)
+    except:
+        print("put() failed, continuing")
 
 
 def get():
@@ -102,10 +105,13 @@ def get():
     we can parse the returned values.
 
     """
-    r = requests.post(GETURL, headers={'AcceptLanguage': 'en,en-gb;q=0.7,de-de;q=0.3'})
-    j = r.json
+    try:
+        r = requests.post(GETURL, headers={'AcceptLanguage': 'en,en-gb;q=0.7,de-de;q=0.3'})
+        j = r.json
 
-    return decode_json(j)
+        return decode_json(j)
+    except:
+        print("get() failed, continuing")
     
 
 def run():
@@ -114,10 +120,13 @@ def run():
     
     """
     while True:
-        (power, daily, total) = get()
-        put(power, daily, total)
+        r = get()
 
-        print('%s %s %s' % (power, daily, total))
+        if r:
+            (power, daily, total) = r
+            put(power, daily, total)
+
+            print('%s %s %s' % (power, daily, total))
 
         time.sleep(WAIT)
             
