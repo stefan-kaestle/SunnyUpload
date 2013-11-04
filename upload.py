@@ -91,7 +91,7 @@ def put(power, daily, total):
         'wholeEnergy': total
         }
     try:
-        r = requests.post(PUTURL, data=data, auth=(USER, PASSWORD))
+        r = requests.post(PUTURL, data=data, auth=(USER, PASSWORD), timeout=1)
         print(r.text)
     except:
         print("put() failed, continuing")
@@ -106,7 +106,7 @@ def get():
 
     """
     try:
-        r = requests.post(GETURL, headers={'AcceptLanguage': 'en,en-gb;q=0.7,de-de;q=0.3'})
+        r = requests.post(GETURL, headers={'AcceptLanguage': 'en,en-gb;q=0.7,de-de;q=0.3'}, timeout=1)
         j = r.json
 
         return decode_json(j)
